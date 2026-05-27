@@ -28,7 +28,7 @@ const authLink = setContext((_, { headers }) => {
 
 const wsLink = new GraphQLWsLink(
   createClient({
-      url: `ws://dulce-stoc-api.onrender.com//graphql`,
+      url: `wss://dulce-stoc-api.onrender.com/graphql`,
       connectionParams: () => {
       const token = getToken();
       return token ? { authorization: `Bearer ${token}` } : {};
