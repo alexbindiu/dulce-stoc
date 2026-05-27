@@ -16,16 +16,18 @@ let socket: Socket | null = null;
 
 export function getSocket(): Socket {
   if (!socket) {
-    socket = io(`https://dulce-stoc-api.onrender.com`, {
-      transports: ['websocket'],
+    // 1. Folosește HTTPS aici, Socket.io va face upgrade-ul la WSS automat în spate
+    socket = io('https://dulce-stoc-api.onrender.com', {
+      // 2. Permite ambele tipuri de transport (foarte important pentru Render!)
+      transports: ['polling', 'websocket'], 
       autoConnect: true,
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: Infinity,
     });
 
-    socket.on('connect',       () => console.log('[WS] Connected:', socket!.id));
-    socket.on('disconnect',    (reason) => console.log('[WS] Disconnected:', reason));
+    socket.on('connect', () => console.log('[WS] Connected:', socket!.id));
+    socket.on('disconnect', (reason) => console.log('[WS] Disconnected:', reason));
     socket.on('connect_error', (err) => console.warn('[WS] Error:', err.message));
   }
   return socket;
