@@ -16,7 +16,7 @@ let socket: Socket | null = null;
 
 export function getSocket(): Socket {
   if (!socket) {
-    socket = io(`https://${window.location.hostname}:3000`, {
+    socket = io(`https://dulce-stoc-api.onrender.com`, {
       transports: ['websocket'],
       autoConnect: true,
       reconnection: true,

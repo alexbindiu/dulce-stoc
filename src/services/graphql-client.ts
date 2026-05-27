@@ -13,7 +13,7 @@ import { getToken } from './api';
 
 // ── HTTP link (queries + mutations) ──────────────────────────────────────────
 const httpLink = createHttpLink({ 
-  uri: `https://${window.location.hostname}:3000/graphql` 
+  uri: `https://dulce-stoc-api.onrender.com/graphql` 
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -28,7 +28,7 @@ const authLink = setContext((_, { headers }) => {
 
 const wsLink = new GraphQLWsLink(
   createClient({
-      url: `ws://${window.location.hostname}:3000/graphql`,
+      url: `ws://dulce-stoc-api.onrender.com//graphql`,
       connectionParams: () => {
       const token = getToken();
       return token ? { authorization: `Bearer ${token}` } : {};

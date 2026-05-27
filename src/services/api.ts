@@ -1,6 +1,6 @@
 import { offlineQueue, QueuedMethod } from './offline-queue';
 
-const BASE = `https://${window.location.hostname}:3000/api`;
+const BASE = `https://dulce-stoc-api.onrender.com/api`;
 
 export function getToken(): string | null {
   return localStorage.getItem('token');
