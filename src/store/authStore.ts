@@ -54,8 +54,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       
       // Dacă backend-ul zice că e nevoie de OTP (logica pe care am pus-o în AuthService)
       if (data.requiresOTP) {
+        // DEV/DEMO: afișăm codul OTP și în consola din browser (apare și în log-ul API)
+        if (data.otp) console.log(`%c[OTP] Cod pentru ${data.email}: ${data.otp}`, 'color:#C9A84C;font-weight:bold');
         set({ requiresOTP: true, pendingEmail: data.email, error: null });
-        return true; 
+        return true;
       }
 
       // Fallback (dacă din vreo eroare nu trece prin OTP)
