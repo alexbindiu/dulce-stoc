@@ -10,10 +10,11 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 import { getToken } from './api';
+import { GRAPHQL_HTTP, GRAPHQL_WS } from './config';
 
 // ── HTTP link (queries + mutations) ──────────────────────────────────────────
-const httpLink = createHttpLink({ 
-  uri: `https://dulce-stoc-api.onrender.com/graphql` 
+const httpLink = createHttpLink({
+  uri: GRAPHQL_HTTP
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -28,7 +29,7 @@ const authLink = setContext((_, { headers }) => {
 
 const wsLink = new GraphQLWsLink(
   createClient({
-      url: `wss://dulce-stoc-api.onrender.com/graphql`,
+      url: GRAPHQL_WS,
       connectionParams: () => {
       const token = getToken();
       return token ? { authorization: `Bearer ${token}` } : {};

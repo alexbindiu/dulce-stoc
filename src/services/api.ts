@@ -1,6 +1,7 @@
 import { offlineQueue, QueuedMethod } from './offline-queue';
+import { REST_BASE } from './config';
 
-const BASE = `https://dulce-stoc-api.onrender.com/api`;
+const BASE = REST_BASE;
 
 export function getToken(): string | null {
   return localStorage.getItem('token');

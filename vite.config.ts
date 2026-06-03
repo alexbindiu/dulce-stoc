@@ -13,7 +13,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'https://dulce-stoc-api.onrender.com',
+        target: 'https://dulcestocapi-production.up.railway.app',
         secure: false,
         changeOrigin: true
       }

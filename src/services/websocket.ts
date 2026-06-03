@@ -1,5 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import type { Product } from '@/types/product';
+import { API_ORIGIN } from './config';
 
 export interface BatchAddedPayload {
   products: Product[];
@@ -16,10 +17,9 @@ let socket: Socket | null = null;
 
 export function getSocket(): Socket {
   if (!socket) {
-    // 1. Folosește HTTPS aici, Socket.io va face upgrade-ul la WSS automat în spate
-    socket = io('https://dulce-stoc-api.onrender.com', {
-      // 2. Permite ambele tipuri de transport (foarte important pentru Render!)
-      transports: ['polling', 'websocket'], 
+    // Socket.IO uses the http(s) origin, not ws://
+    socket = io(API_ORIGIN, {
+      transports: ['polling', 'websocket'], // Trebuie să fie ambele
       autoConnect: true,
       reconnection: true,
       reconnectionDelay: 1000,
