@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { User, RegisterData, LoginData } from '../types/auth';
+import { REST_BASE } from '../services/config';
 
 interface AuthState {
   currentUser: User | null;
@@ -21,7 +22,7 @@ interface AuthState {
 }
 
 async function postJson(path: string, body: unknown) {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${REST_BASE}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
