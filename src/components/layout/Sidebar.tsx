@@ -14,7 +14,7 @@ export function Sidebar() {
   const { currentUser, logout } = useAuthStore()
 
   return (
-    <aside className="w-56 flex-shrink-0 bg-brown flex flex-col h-full">
+    <aside className="fixed inset-y-0 left-0 z-30 w-56 bg-brown flex flex-col">
       {/* Logo */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="font-display text-xl font-semibold text-white">
