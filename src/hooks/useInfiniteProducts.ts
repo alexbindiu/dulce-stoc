@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client/react';
-import { apolloClient } from '@/services/graphql-client';
 import { GET_PRODUCTS } from '@/services/gql/products.gql';
 
 export interface ProductFiltersGql {
@@ -21,57 +20,42 @@ interface GetProductsQueryData {
 const PAGE_SIZE = 12;
 
 export function useInfiniteProducts(filters: ProductFiltersGql = {}) {
+  const filterKey = `${filters.search ?? ''}|${filters.category ?? ''}|${filters.activeOnly ?? false}`;
   const [page, setPage] = useState(1);
 
-  // Build query variables — page 1 always on filter change
+  // Resetează pagina SINCRON când se schimbă filtrele, înainte ca query-ul să
+  // ruleze. Altfel căutarea pornea cu o pagină veche (ex: 3) și rezultatele se
+  // adăugau sub produsele deja încărcate, în loc să le înlocuiască.
+  const prevKey = useRef(filterKey);
+  let activePage = page;
+  if (prevKey.current !== filterKey) {
+    prevKey.current = filterKey;
+    activePage = 1;
+    if (page !== 1) setPage(1);
+  }
+
   const variables = {
-    query: {
-      ...filters,
-      page,
-      pageSize: PAGE_SIZE,
-    },
+    query: { ...filters, page: activePage, pageSize: PAGE_SIZE },
   };
 
-  const { data, loading, fetchMore, refetch } = useQuery<GetProductsQueryData>(GET_PRODUCTS, {
+  const { data, loading, refetch } = useQuery<GetProductsQueryData>(GET_PRODUCTS, {
     variables,
     notifyOnNetworkStatusChange: true,
   });
 
-  const products   = data?.products?.data        ?? [];
-  const total      = data?.products?.total       ?? 0;
-  const totalPages = data?.products?.totalPages  ?? 1;
+  const products    = data?.products?.data        ?? [];
+  const total       = data?.products?.total       ?? 0;
+  const totalPages  = data?.products?.totalPages  ?? 1;
   const hasNextPage = data?.products?.hasNextPage ?? false;
 
-  // ── Prefetch next page ────────────────────────────────────────────────────
-  useEffect(() => {
-    if (hasNextPage) {
-      apolloClient.query({
-        query: GET_PRODUCTS,
-        variables: {
-          query: { ...filters, page: page + 1, pageSize: PAGE_SIZE },
-        },
-      }).catch(() => {}); // silent — it just warms the cache
-    }
-  }, [page, hasNextPage, JSON.stringify(filters)]);
-
-  // ── Load more (infinite scroll trigger) ──────────────────────────────────
+  // ── Load more (infinite scroll) — incrementăm pagina; useQuery refetchează,
+  //    iar field policy-ul din cache adaugă pagina nouă în listă. ─────────────
   const loadMore = useCallback(() => {
     if (!hasNextPage || loading) return;
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchMore({
-      variables: {
-        query: { ...filters, page: nextPage, pageSize: PAGE_SIZE },
-      },
-    });
-  }, [hasNextPage, loading, page, filters, fetchMore]);
+    setPage((p) => p + 1);
+  }, [hasNextPage, loading]);
 
-  // ── Reset when filters change ─────────────────────────────────────────────
-  useEffect(() => {
-    setPage(1);
-  }, [filters.search, filters.category, filters.activeOnly]);
-
-  // ── IntersectionObserver sentinel ref ────────────────────────────────────
+  // ── IntersectionObserver sentinel ─────────────────────────────────────────
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -84,12 +68,20 @@ export function useInfiniteProducts(filters: ProductFiltersGql = {}) {
           loadMore();
         }
       },
-      { rootMargin: '200px' }, // trigger 200px before sentinel enters viewport
+      { rootMargin: '200px' },
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, [hasNextPage, loading, loadMore]);
+
+  // ── Refetch curat: revine la pagina 1 și reîncarcă (folosit după
+  //    add/edit/delete ca lista să reflecte starea reală din backend). ────────
+  const reset = useCallback(() => {
+    setPage(1);
+    return refetch({ query: { ...filters, page: 1, pageSize: PAGE_SIZE } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetch, filterKey]);
 
   return {
     products,
@@ -99,6 +91,6 @@ export function useInfiniteProducts(filters: ProductFiltersGql = {}) {
     loading,
     page,
     sentinelRef,
-    refetch,
+    refetch: reset,
   };
 }

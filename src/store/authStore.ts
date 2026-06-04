@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { User, RegisterData, LoginData } from '../types/auth';
 import { REST_BASE } from '../services/config';
+import { apolloClient } from '../services/graphql-client';
 
 interface AuthState {
   currentUser: User | null;
@@ -96,9 +97,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch { set({ error: 'Server indisponibil.' }); return false; }
   },
 
-  logout: () => { 
-    localStorage.removeItem('token'); 
-    set({ currentUser: null, requiresOTP: false, pendingEmail: null }); 
+  logout: () => {
+    localStorage.removeItem('token');
+    // Golim cache-ul Apollo ca produsele/comenzile unui user să nu rămână
+    // vizibile la următorul login (cauza erorii "Produsul nu a fost găsit").
+    apolloClient.clearStore().catch(() => {});
+    set({ currentUser: null, requiresOTP: false, pendingEmail: null });
   },
   
   clearError: () => set({ error: null }),

@@ -56,19 +56,24 @@ export const apolloClient = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          // Merge pages for infinite scroll
+          // Merge pages for infinite scroll.
+          // keyArgs as a function => fiecare combinație de filtre + pageSize are
+          // propria listă în cache (altfel căutarea/pageSize-ul se amestecau).
           products: {
-            keyArgs: ['query', ['search', 'category', 'activeOnly']],
-            merge(existing, incoming, { args }) {
-              const page = args?.query?.page ?? 1;
-              const existingData = existing?.data ?? [];
-              const incomingData = incoming?.data ?? [];
-              // Page 1 = fresh load (filter changed), else append
-              const merged = page === 1 ? incomingData : [...existingData, ...incomingData];
-              return { ...incoming, data: merged };
+            keyArgs: (args: any) => {
+              const q = args?.query ?? {};
+              return `${q.search ?? ''}|${q.category ?? ''}|${q.activeOnly ?? false}|${q.pageSize ?? 12}`;
             },
-            read(existing) {
-              return existing;
+            merge(existing: any, incoming: any, { args }: any) {
+              const page = args?.query?.page ?? 1;
+              const incomingData = incoming?.data ?? [];
+              // Page 1 = încărcare nouă (filtru schimbat / refetch) => înlocuiește
+              if (page <= 1) return { ...incoming, data: incomingData };
+              // Paginile următoare se adaugă, fără duplicate
+              const existingData = existing?.data ?? [];
+              const seen = new Set(existingData.map((p: any) => p.__ref ?? p.id));
+              const deduped = incomingData.filter((p: any) => !seen.has(p.__ref ?? p.id));
+              return { ...incoming, data: [...existingData, ...deduped] };
             },
           },
         },
