@@ -58,7 +58,9 @@ export default function OrdersPage() {
   });
 
   const { data: productsData } = useQuery(GET_PRODUCTS, {
-    variables: { query: { page: 1, pageSize: 1000 } },
+    // pageSize max acceptat de backend este 100; 1000 pica la validare și
+    // lăsa dropdown-ul de produse gol.
+    variables: { query: { page: 1, pageSize: 100 } },
   });
 
   const allProducts = productsData?.products?.data ?? [];
