@@ -70,13 +70,13 @@ export function ChatBox() {
 
       {/* Fereastra de Chat */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 bg-surface border border-border rounded-xl shadow-2xl flex flex-col overflow-hidden mb-2 animate-slideUp">
+        <div className="absolute bottom-16 right-0 w-80 h-[30rem] max-h-[75vh] bg-surface border border-border rounded-xl shadow-2xl flex flex-col overflow-hidden mb-2 animate-slideUp">
           <div className="bg-brown px-4 py-3 text-white">
             <h3 className="font-display font-semibold text-lg">Grupul Pofticioșilor</h3>
             <p className="text-xs text-white/60">Discută live cu alți clienți</p>
           </div>
 
-          <div className="flex-1 h-72 overflow-y-auto p-4 space-y-3 bg-paper">
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-paper">
             {messages.length === 0 ? (
               <p className="text-xs text-muted text-center mt-4">Niciun mesaj încă. Fii primul care scrie!</p>
             ) : (

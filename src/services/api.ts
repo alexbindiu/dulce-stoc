@@ -29,16 +29,16 @@ function setOnline(value: boolean) {
 window.addEventListener('online',  () => setOnline(true));
 window.addEventListener('offline', () => setOnline(false));
 
-// Active probe — pings the server every 15 s to detect silent failures
+// Active probe — pings the lightweight health endpoint every 15 s to detect
+// silent failures. Uses GET /api/health (200) instead of POST /auth/login,
+// which spammed the console with 401s.
 async function probe() {
   try {
-    const res = await fetch(`${BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'probe@test.com', password: '__probe__' }), // <--- Am schimbat emailul aici
+    const res = await fetch(`${BASE}/health`, {
+      method: 'GET',
       signal: AbortSignal.timeout(4000),
     });
-    setOnline(res.status < 600);
+    setOnline(res.ok);
   } catch {
     setOnline(false);
   }
