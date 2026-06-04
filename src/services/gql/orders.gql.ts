@@ -33,10 +33,15 @@ export const GET_ORDER = gql`
   }
 `;
 
+// Nu cerem `items` în răspuns: backend-ul întoarce comanda fără relația items
+// încărcată, iar Order.items e non-nullable => serializarea pica. Lista se
+// reîncarcă oricum imediat (GET_ORDERS), deci scalarii sunt suficienți aici.
 export const CREATE_ORDER = gql`
-  ${ORDER_FIELDS}
   mutation CreateOrder($input: CreateOrderInput!) {
-    createOrder(input: $input) { ...OrderFields }
+    createOrder(input: $input) {
+      id customerName customerPhone notes status
+      totalValue totalItems createdAt updatedAt
+    }
   }
 `;
 
