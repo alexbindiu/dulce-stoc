@@ -38,7 +38,7 @@ interface ProductState {
   fetchAllProducts: () => Promise<void>;
   getProductById: (id: string) => Promise<Product>;
   addProduct: (data: ProductFormData) => Promise<Product>;
-  updateProduct: (id: string, data: ProductFormData) => Promise<void>;
+  updateProduct: (id: string, data: Partial<ProductFormData>) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   setFilters: (f: Partial<ProductFilters>) => void;
   resetFilters: () => void;

@@ -40,7 +40,9 @@ export default function InventarPage() {
         newAnswers.forEach(a => {
           if (a.newStock !== a.oldStock) {
             const prod = allProducts.find(pp => pp.id === a.productId)
-            if (prod) updateProduct(a.productId, { ...prod, stock: a.newStock })
+            // PATCH doar câmpul modificat; trimiterea întregului produs (id, userId,
+            // createdAt…) pica la validare (forbidNonWhitelisted => 400).
+            if (prod) updateProduct(a.productId, { stock: a.newStock })
           }
         })
         setScreen('summary')
