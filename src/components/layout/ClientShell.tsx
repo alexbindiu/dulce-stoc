@@ -1,7 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '../ui/Button'
-import { ChatBox } from '../chat/ChatBox' // <--- 1. Importăm componenta de chat
 
 export function ClientShell() {
   const { currentUser, logout } = useAuthStore()
@@ -22,12 +21,9 @@ export function ClientShell() {
         </div>
       </header>
       
-      <main className="flex-1 max-w-5xl w-full mx-auto p-8 page-enter">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-8 page-enter">
         <Outlet />
       </main>
-
-      {/* 3. Aici adăugăm componenta care va pluti în dreapta-jos */}
-      <ChatBox />
     </div>
   )
 }

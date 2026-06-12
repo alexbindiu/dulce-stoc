@@ -16,6 +16,8 @@ import StatisticsPageGql from '@/pages/StatisticsPageGql'
 import InventarPage     from '@/pages/InventarPage'
 import OrdersPage       from '@/pages/OrdersPage'
 import ClientHomePage   from '@/pages/ClientHomePage'
+import BusinessDetailPage from '@/pages/BusinessDetailPage'
+import AdminInboxPage   from '@/pages/AdminInboxPage'
 import SecurityPage     from '@/pages/SecurityPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 
@@ -78,12 +80,14 @@ export default function App() {
           <Route path="statistics"       element={<StatisticsPageGql />} />
           <Route path="inventar"         element={<InventarPage />} />
           <Route path="orders"           element={<OrdersPage />} />
-          <Route path="security"         element={<SecurityPage />} /> 
+          <Route path="inbox"            element={<AdminInboxPage />} />
+          <Route path="security"         element={<SecurityPage />} />
         </Route>
 
         {/* RUTA PROTEJATĂ PENTRU VIZITATORI (NORMAL_USER) */}
         <Route path="/client" element={<ClientShell />}>
           <Route index element={<ClientHomePage />} />
+          <Route path="business/:id" element={<BusinessDetailPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />

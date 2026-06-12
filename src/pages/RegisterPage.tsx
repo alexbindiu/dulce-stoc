@@ -11,7 +11,7 @@ type AccountType = 'PATISERIE' | 'CLIENT'
 
 const EMPTY: FormState = {
   firstName: '', lastName: '', email: '', password: '', passwordConfirm: '',
-  businessName: '', businessType: 'Patiserie', county: '',
+  businessName: '', businessType: 'Patiserie', county: '', phone: '', description: '',
 }
 
 export default function RegisterPage() {
@@ -41,7 +41,7 @@ export default function RegisterPage() {
     }
   }, [form, submitted, accountType])
 
-  const set = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+  const set = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
   // Funcție ajutătoare: Dacă e client, ascundem detaliile de afacere folosind 'N/A'
@@ -157,7 +157,18 @@ export default function RegisterPage() {
                     <Select label="Tip afacere" value={form.businessType} onChange={set('businessType')}>
                       {['Patiserie', 'Cofetărie', 'Brutărie', 'Altele'].map(t => <option key={t}>{t}</option>)}
                     </Select>
-                    <Input label="Județ" value={form.county} onChange={set('county')} placeholder="Cluj" />
+                    <Input label="Oraș / Județ" value={form.county} onChange={set('county')} placeholder="Cluj" />
+                  </div>
+                  <Input label="Telefon (opțional)" value={form.phone ?? ''} onChange={set('phone')} placeholder="07xx xxx xxx" />
+                  <div>
+                    <label className="block text-xs font-medium text-brown-soft mb-1.5">Descriere (opțional)</label>
+                    <textarea
+                      value={form.description ?? ''}
+                      onChange={set('description')}
+                      rows={3}
+                      placeholder="Spune clienților ce te face special…"
+                      className="w-full bg-paper border border-border rounded-md px-3 py-2 text-sm text-brown outline-none focus:border-caramel resize-none"
+                    />
                   </div>
                 </div>
               </div>

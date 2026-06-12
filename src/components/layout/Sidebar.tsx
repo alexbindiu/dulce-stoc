@@ -5,6 +5,7 @@ const NAV = [
   { to: '/app',            label: 'Acasă',      icon: '🏠', end: true },
   { to: '/app/products',   label: 'Produse',    icon: '🥐' },
   { to: '/app/orders',     label: 'Comenzi',    icon: '📋' },
+  { to: '/app/inbox',      label: 'Mesaje',     icon: '💬' },
   { to: '/app/inventar',   label: 'Inventar',   icon: '⚡' },
   { to: '/app/statistics', label: 'Statistici', icon: '📊' },
   { to: '/app/security', label: 'Securitate', icon: '🛡️' },

@@ -6,6 +6,8 @@ export interface User {
   businessName: string
   businessType: 'Patiserie' | 'Cofetărie' | 'Brutărie' | 'Altele'
   county: string
+  phone?: string
+  description?: string
   createdAt: string
   // Am adăugat rolul aici:
   role?: { id: string, action?: string, name: 'ADMIN' | 'NORMAL_USER' } 
