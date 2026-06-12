@@ -22,6 +22,8 @@ export interface Product {
   createdAt: string
   updatedAt: string
   isActive: boolean
+  manufactureDate?: string
+  expiryDate?: string
 }
 
 export type ProductFormData = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>

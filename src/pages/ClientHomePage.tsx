@@ -45,6 +45,19 @@ export default function ClientHomePage() {
         <CitySelect cities={cities} value={city} onChange={setCity} />
       </div>
 
+      {/* AI assistant entry */}
+      <button
+        onClick={() => navigate('/client/assistant')}
+        className="w-full mb-8 flex items-center gap-4 text-left bg-gradient-to-r from-caramel/15 to-gold/10 border border-caramel/30 rounded-2xl px-5 py-4 hover:shadow-md hover:border-caramel transition-all"
+      >
+        <span className="text-3xl">✨</span>
+        <div className="flex-1">
+          <p className="font-display text-lg font-semibold text-brown">Asistentul Dulce</p>
+          <p className="text-sm text-muted">Întreabă-mă ce poftești — „ceva vegan”, „tort de casă” — și-ți găsesc patiseria potrivită.</p>
+        </div>
+        <span className="text-caramel font-semibold hidden sm:block">Întreabă →</span>
+      </button>
+
       {!city ? (
         <div className="py-20 text-center text-muted text-sm">Selectează un oraș pentru a vedea afacerile disponibile.</div>
       ) : loading ? (

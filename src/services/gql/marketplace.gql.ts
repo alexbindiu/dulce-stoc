@@ -3,7 +3,8 @@ import { PRODUCT_FIELDS } from './products.gql';
 
 export const BUSINESS_FIELDS = gql`
   fragment BusinessFields on BusinessProfile {
-    id firstName lastName businessName businessType county phone description productCount
+    id firstName lastName businessName businessType county phone description
+    productionScale dietaryOptions specialties productCount
   }
 `;
 

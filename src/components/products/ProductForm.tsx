@@ -14,11 +14,13 @@ interface Props {
 const EMPTY: ProductFormData = {
   name: '', category: Category.Tort, pricePerUnit: 0,
   stock: 0, description: '', ingredients: [], isActive: true,
+  manufactureDate: '', expiryDate: '',
 }
 
 function toForm(p: Product): ProductFormData {
   return { name: p.name, category: p.category, pricePerUnit: p.pricePerUnit,
-    stock: p.stock, description: p.description, ingredients: p.ingredients, isActive: p.isActive }
+    stock: p.stock, description: p.description, ingredients: p.ingredients, isActive: p.isActive,
+    manufactureDate: p.manufactureDate ?? '', expiryDate: p.expiryDate ?? '' }
 }
 
 export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting = false }: Props) {
@@ -83,6 +85,13 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting = fa
               <span className="text-sm text-brown">Activ</span>
             </label>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Input label="Data fabricație (opțional)" type="date" value={form.manufactureDate ?? ''}
+            onChange={e => set('manufactureDate', e.target.value)} />
+          <Input label="Data expirare (opțional)" type="date" value={form.expiryDate ?? ''}
+            onChange={e => set('expiryDate', e.target.value)} />
         </div>
 
         <Textarea label="Descriere" value={form.description}

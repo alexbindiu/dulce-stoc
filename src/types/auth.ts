@@ -8,6 +8,9 @@ export interface User {
   county: string
   phone?: string
   description?: string
+  productionScale?: string
+  dietaryOptions?: string[]
+  specialties?: string
   createdAt: string
   // Am adăugat rolul aici:
   role?: { id: string, action?: string, name: 'ADMIN' | 'NORMAL_USER' } 

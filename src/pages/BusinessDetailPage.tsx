@@ -9,9 +9,11 @@ import { ChatPanel } from '@/components/chat/ChatPanel'
 interface Business {
   id: string; businessName: string; businessType: string; county: string
   phone?: string; description?: string; productCount: number
+  productionScale?: string; dietaryOptions?: string[]; specialties?: string
 }
 interface CatalogProduct {
-  id: string; name: string; category: string; pricePerUnit: number; stock: number; description?: string
+  id: string; name: string; category: string; pricePerUnit: number; stock: number
+  description?: string; expiryDate?: string
 }
 
 export default function BusinessDetailPage() {
@@ -57,6 +59,19 @@ export default function BusinessDetailPage() {
             <p className="text-sm text-muted">{business.businessType} • {business.county}</p>
             {business.phone && <p className="text-sm text-brown mt-2">📞 {business.phone}</p>}
             {business.description && <p className="text-sm text-muted mt-3 leading-relaxed">{business.description}</p>}
+            {(business.productionScale || business.specialties || (business.dietaryOptions?.length ?? 0) > 0) && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {business.productionScale && (
+                  <span className="text-xs bg-paper border border-border rounded-full px-2.5 py-1 text-brown-soft">🏠 {business.productionScale}</span>
+                )}
+                {business.specialties && (
+                  <span className="text-xs bg-paper border border-border rounded-full px-2.5 py-1 text-brown-soft">⭐ {business.specialties}</span>
+                )}
+                {business.dietaryOptions?.map((d) => (
+                  <span key={d} className="text-xs bg-green-50 border border-green-200 text-green-700 rounded-full px-2.5 py-1">{d}</span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="bg-surface border border-border rounded-xl p-6">

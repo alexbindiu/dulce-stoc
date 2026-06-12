@@ -12,6 +12,7 @@ type AccountType = 'PATISERIE' | 'CLIENT'
 const EMPTY: FormState = {
   firstName: '', lastName: '', email: '', password: '', passwordConfirm: '',
   businessName: '', businessType: 'Patiserie', county: '', phone: '', description: '',
+  productionScale: '', dietaryOptions: [], specialties: '',
 }
 
 export default function RegisterPage() {
@@ -169,6 +170,36 @@ export default function RegisterPage() {
                       placeholder="Spune clienților ce te face special…"
                       className="w-full bg-paper border border-border rounded-md px-3 py-2 text-sm text-brown outline-none focus:border-caramel resize-none"
                     />
+                  </div>
+
+                  {/* Detalii pentru asistentul AI */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <Select label="Producție (opțional)" value={form.productionScale ?? ''} onChange={set('productionScale')}>
+                      <option value="">—</option>
+                      {['Casă', 'Scară mică', 'Scară mare'].map(t => <option key={t}>{t}</option>)}
+                    </Select>
+                    <Input label="Specialități (opțional)" value={form.specialties ?? ''} onChange={set('specialties')} placeholder="ex: torturi, fără zahăr" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-brown-soft mb-1.5">Opțiuni dietetice (opțional)</label>
+                    <div className="flex flex-wrap gap-2">
+                      {['Vegan', 'Vegetarian', 'Fără gluten', 'Fără lactoză'].map(opt => {
+                        const active = (form.dietaryOptions ?? []).includes(opt)
+                        return (
+                          <button
+                            type="button"
+                            key={opt}
+                            onClick={() => setForm(f => {
+                              const cur = f.dietaryOptions ?? []
+                              return { ...f, dietaryOptions: cur.includes(opt) ? cur.filter(d => d !== opt) : [...cur, opt] }
+                            })}
+                            className={`text-xs rounded-full px-3 py-1.5 border transition-colors ${active ? 'bg-caramel text-white border-caramel' : 'bg-paper text-brown-soft border-border hover:border-caramel'}`}
+                          >
+                            {opt}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>

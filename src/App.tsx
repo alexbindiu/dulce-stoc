@@ -17,6 +17,7 @@ import InventarPage     from '@/pages/InventarPage'
 import OrdersPage       from '@/pages/OrdersPage'
 import ClientHomePage   from '@/pages/ClientHomePage'
 import BusinessDetailPage from '@/pages/BusinessDetailPage'
+import AssistantPage    from '@/pages/AssistantPage'
 import AdminInboxPage   from '@/pages/AdminInboxPage'
 import SecurityPage     from '@/pages/SecurityPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
@@ -87,6 +88,7 @@ export default function App() {
         {/* RUTA PROTEJATĂ PENTRU VIZITATORI (NORMAL_USER) */}
         <Route path="/client" element={<ClientShell />}>
           <Route index element={<ClientHomePage />} />
+          <Route path="assistant" element={<AssistantPage />} />
           <Route path="business/:id" element={<BusinessDetailPage />} />
         </Route>
 

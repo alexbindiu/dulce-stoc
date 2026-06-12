@@ -4,6 +4,7 @@ export const PRODUCT_FIELDS = gql`
   fragment ProductFields on Product {
     id name category pricePerUnit stock description
     ingredients isActive createdAt updatedAt
+    manufactureDate expiryDate
   }
 `;
 
