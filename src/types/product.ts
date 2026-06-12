@@ -6,6 +6,11 @@ export enum Category {
   Tarta     = 'Tartă',
 }
 
+export const CATEGORY_EMOJI: Record<Category, string> = {
+  [Category.Tort]: '🎂', [Category.Ecler]: '🍫',
+  [Category.Croissant]: '🥐', [Category.Prajitura]: '🍰', [Category.Tarta]: '🥧',
+}
+
 export interface Product {
   id: string
   name: string

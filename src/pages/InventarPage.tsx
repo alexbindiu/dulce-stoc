@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Topbar } from '@/components/layout/Topbar'
 import { Button } from '@/components/ui/Button'
 import { useProductStore } from '@/store/productStore'
-import { CATEGORY_EMOJI } from '@/components/products/ProductTable'
+import { CATEGORY_EMOJI } from '@/types/product'
 
 type Screen = 'intro' | 'cards' | 'summary'
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import { useProductStore } from '@/store/productStore'
 import { Topbar } from '@/components/layout/Topbar'
-import { CATEGORY_EMOJI } from '@/components/products/ProductTable'
+import { CATEGORY_EMOJI } from '@/types/product'
 
 export default function LandingPage() {
   const { currentUser } = useAuthStore()
