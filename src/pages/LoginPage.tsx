@@ -110,21 +110,21 @@ export default function LoginPage() {
   )
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-      {/* Partea stângă: branding + conturi demo */}
-      <div className="hidden lg:flex flex-col bg-brown px-12 py-12 relative overflow-hidden">
+    <div className="h-screen grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+      {/* Partea stângă: branding + conturi demo (scrollabilă) */}
+      <div className="hidden lg:flex flex-col bg-brown px-12 py-10 relative overflow-hidden h-screen">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 30% 70%, #C9A84C 0%, transparent 60%)' }} />
         <div className="relative z-10 flex flex-col h-full min-h-0 w-full max-w-md mx-auto">
-          <div className="text-center mb-6">
+          <div className="text-center mb-6 flex-shrink-0">
             <div className="font-display text-4xl font-semibold text-white">
               Dulce <span className="text-gradient">Stoc</span>
             </div>
             <p className="font-display italic text-sm text-white/40 mt-1">— evidența ta, simplă</p>
           </div>
 
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3 flex-shrink-0">
             <p className="text-xs font-semibold tracking-[0.18em] uppercase text-gold">Conturi demo</p>
-            <span className="text-[11px] text-white/40">parolă: <span className="font-mono text-gold">parola123</span></span>
+            <span className="text-[11px] text-white/40">click pentru autentificare</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3 flex-1 min-h-0">
@@ -144,8 +144,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Formularul din dreapta actualizat pentru a suporta și OTP */}
-      <div className="flex flex-col items-center justify-center px-8 py-16 bg-surface animate-fadeIn">
+      {/* Formularul din dreapta — fix, centrat, fără scroll */}
+      <div className="flex flex-col items-center justify-center px-8 bg-surface h-screen overflow-hidden animate-fadeIn">
         <div className="w-full max-w-sm">
           <div className="mb-8">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-caramel mb-2">Bun venit înapoi</p>
