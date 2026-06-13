@@ -4,37 +4,65 @@ import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { useAuthStore } from '@/store/authStore'
 import { validateLoginForm, isFormValid, type FieldErrors } from '@/utils/validation'
+import { REST_BASE } from '@/services/config'
+
+type DemoAccount = {
+  email: string; firstName: string; lastName: string
+  kind: 'BUSINESS' | 'CLIENT'
+  businessName: string | null; businessType: string; county: string
+}
+
+// Folosite până se încarcă lista de pe server (sau dacă backend-ul nu e încă actualizat)
+const FALLBACK: DemoAccount[] = [
+  { email: 'admin@patiserie.ro', firstName: 'Ana', lastName: 'Proprietar', kind: 'BUSINESS', businessName: 'Patiseria Anei', businessType: 'Patiserie', county: 'Cluj-Napoca' },
+  { email: 'client@vizitator.ro', firstName: 'Ion', lastName: 'Client', kind: 'CLIENT', businessName: null, businessType: 'Altele', county: 'Cluj-Napoca' },
+]
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  
+
   // Tragem TOT ce avem nevoie din Zustand, inclusiv elementele pentru OTP
-  const { 
-    login, verifyOtp, forgotPassword, currentUser, error, clearError, 
-    requiresOTP, pendingEmail, resetOtpState 
+  const {
+    login, verifyOtp, forgotPassword, currentUser, error, clearError,
+    requiresOTP, pendingEmail, resetOtpState
   } = useAuthStore()
 
   // 1. Redirecționare în funcție de ROL
-  useEffect(() => { 
+  useEffect(() => {
     if (currentUser) {
       const isClient = currentUser.role?.name === 'NORMAL_USER';
       const defaultRoute = isClient ? '/client' : '/app';
       const intendedRoute = (location.state as { from?: Location })?.from?.pathname;
-      navigate(intendedRoute && intendedRoute !== '/' ? intendedRoute : defaultRoute, { replace: true }) 
-    } 
+      navigate(intendedRoute && intendedRoute !== '/' ? intendedRoute : defaultRoute, { replace: true })
+    }
   }, [currentUser, navigate, location.state])
 
   // Contul implicit pus pe admin
   const [form, setForm]       = useState({ email: 'admin@patiserie.ro', password: 'parola123' })
   const [errors, setErrors]   = useState<FieldErrors>({})
   const [submitted, setSub]   = useState(false)
-  
+
   // Stare separată pentru codul OTP
   const [otp, setOtp]         = useState('')
 
+  // Lista de conturi demo (de pe server)
+  const [accounts, setAccounts] = useState<DemoAccount[]>([])
+  useEffect(() => {
+    fetch(`${REST_BASE}/auth/demo-accounts`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((d) => { if (Array.isArray(d) && d.length) setAccounts(d) })
+      .catch(() => {})
+  }, [])
+
   useEffect(() => { if (submitted && !requiresOTP) setErrors(validateLoginForm(form)) }, [form, submitted, requiresOTP])
   useEffect(() => { clearError() }, [])
+
+  const list = accounts.length ? accounts : FALLBACK
+  const businesses = list.filter((a) => a.kind === 'BUSINESS')
+  const clients    = list.filter((a) => a.kind === 'CLIENT')
+
+  function fill(email: string) { setForm({ email, password: 'parola123' }) }
 
   // Handler Login (Pasul 1)
   async function handleSubmit(e: React.FormEvent) {
@@ -42,7 +70,7 @@ export default function LoginPage() {
     const errs = validateLoginForm(form)
     setErrors(errs)
     if (!isFormValid(errs)) return
-    
+
     // Store-ul va seta requiresOTP pe true dacă backend-ul cere asta
     await login(form)
   }
@@ -65,25 +93,52 @@ export default function LoginPage() {
     if (success) alert("Un link de resetare a fost trimis pe adresa ta de email!")
   }
 
+  const AccountCard = ({ a }: { a: DemoAccount }) => (
+    <button
+      type="button"
+      onClick={() => fill(a.email)}
+      className={`w-full text-left p-2.5 rounded-lg border transition-all hover:-translate-y-0.5 ${
+        form.email === a.email
+          ? 'bg-gold/15 border-gold/50'
+          : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-gold/40'
+      }`}
+    >
+      <p className="text-xs font-medium text-white/85 truncate">{a.businessName ?? `${a.firstName} ${a.lastName}`}</p>
+      <p className="text-[10px] text-gold/80 font-mono truncate">{a.email}</p>
+      <p className="text-[10px] text-white/30 truncate">{a.businessType !== 'Altele' ? `${a.businessType} · ` : ''}{a.county}</p>
+    </button>
+  )
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-      {/* Partea stângă cu branding-ul original */}
-      <div className="hidden lg:flex flex-col items-center justify-center bg-brown px-16 py-20 relative overflow-hidden">
+      {/* Partea stângă: branding + conturi demo */}
+      <div className="hidden lg:flex flex-col bg-brown px-12 py-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 30% 70%, #C9A84C 0%, transparent 60%)' }} />
-        <div className="relative z-10 text-center">
-          <div className="font-display text-5xl font-semibold text-white mb-3">
-            Dulce <span className="text-gold">Stoc</span>
-          </div>
-          <p className="font-display italic text-lg text-white/40 mb-10">— evidența ta, simplă</p>
-          
-          <div className="mt-10 flex gap-4 text-left justify-center">
-            <div className="p-4 bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:bg-white/10" onClick={() => setForm({ email: 'admin@patiserie.ro', password: 'parola123' })}>
-              <p className="text-xs text-white/40 mb-1">Cont Admin (Patiserie)</p>
-              <p className="text-xs text-gold font-mono">admin@patiserie.ro</p>
+        <div className="relative z-10 flex flex-col h-full min-h-0 w-full max-w-md mx-auto">
+          <div className="text-center mb-6">
+            <div className="font-display text-4xl font-semibold text-white">
+              Dulce <span className="text-gradient">Stoc</span>
             </div>
-            <div className="p-4 bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:bg-white/10" onClick={() => setForm({ email: 'client@vizitator.ro', password: 'parola123' })}>
-              <p className="text-xs text-white/40 mb-1">Cont User (Client)</p>
-              <p className="text-xs text-gold font-mono">client@vizitator.ro</p>
+            <p className="font-display italic text-sm text-white/40 mt-1">— evidența ta, simplă</p>
+          </div>
+
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold tracking-[0.18em] uppercase text-gold">Conturi demo</p>
+            <span className="text-[11px] text-white/40">parolă: <span className="font-mono text-gold">parola123</span></span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 flex-1 min-h-0">
+            <div className="flex flex-col min-h-0">
+              <p className="text-[11px] text-white/40 mb-1.5 flex-shrink-0">🏪 Patiserii ({businesses.length})</p>
+              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 stagger-children">
+                {businesses.map((a) => <AccountCard key={a.email} a={a} />)}
+              </div>
+            </div>
+            <div className="flex flex-col min-h-0">
+              <p className="text-[11px] text-white/40 mb-1.5 flex-shrink-0">👤 Clienți ({clients.length})</p>
+              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 stagger-children">
+                {clients.map((a) => <AccountCard key={a.email} a={a} />)}
+              </div>
             </div>
           </div>
         </div>
@@ -98,14 +153,14 @@ export default function LoginPage() {
               {!requiresOTP ? 'Intră în cont' : 'Verificare Securitate'}
             </h1>
           </div>
-          
+
           {error && <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">{error}</div>}
-          
+
           {!requiresOTP ? (
             // PASUL 1: FORMULARUL ORIGINAL DE LOGIN
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
               <Input label="Email" type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} error={errors.email} />
-              
+
               <div className="relative">
                 <Input label="Parolă" type="password" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} error={errors.password} />
                 <div className="flex justify-end mt-1">
@@ -121,16 +176,16 @@ export default function LoginPage() {
               <p className="text-sm text-muted mb-4">
                 Am trimis un cod de verificare pe adresa <span className="font-semibold text-brown">{pendingEmail}</span>.
               </p>
-              
-              <Input 
-                label="Cod OTP (6 cifre)" 
-                type="text" 
-                value={otp} 
-                onChange={e => setOtp(e.target.value)} 
-                error={''} 
+
+              <Input
+                label="Cod OTP (6 cifre)"
+                type="text"
+                value={otp}
+                onChange={e => setOtp(e.target.value)}
+                error={''}
                 maxLength={6}
               />
-              
+
               <Button type="submit" className="w-full justify-center py-3">Verifică Codul</Button>
 
               <div className="text-center mt-4">
