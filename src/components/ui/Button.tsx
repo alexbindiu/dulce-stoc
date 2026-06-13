@@ -27,6 +27,7 @@ export function Button({ variant = 'primary', size = 'md', className = '', child
       {...props}
       className={[
         'inline-flex items-center gap-1.5 font-medium border rounded-md',
+        'transition-all duration-200 active:scale-[0.97] disabled:active:scale-100',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         V[variant], S[size], className,
       ].join(' ')}

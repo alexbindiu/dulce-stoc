@@ -88,7 +88,7 @@ export default function ProductsPageGql() {
         {newBatchCount > 0 && (
           <button
             onClick={() => { setNewBatchCount(0); apolloClient.cache.evict({ fieldName: 'products' }); refetch(); }}
-            className="w-full mb-4 py-2.5 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700 font-semibold hover:bg-green-100 transition-colors"
+            className="w-full mb-4 py-2.5 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700 font-semibold hover:bg-green-100 transition-colors animate-fade-in-up"
           >
             ↑ {newBatchCount} produse noi generate — click pentru a actualiza lista
           </button>
@@ -141,15 +141,15 @@ export default function ProductsPageGql() {
             {hasFilters ? 'Niciun produs nu corespunde filtrelor.' : 'Nu există produse.'}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
             {products.map((p: Product) => (
               <div
                 key={p.id}
                 onClick={() => navigate(`/app/products/${p.id}`)}
-                className="bg-surface border border-border rounded-xl p-4 cursor-pointer hover:border-caramel/50 hover:shadow-sm transition-all group"
+                className="bg-surface border border-border rounded-xl p-4 cursor-pointer hover:border-caramel/50 hover-lift group"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <span className="text-3xl">{CATEGORY_EMOJI[p.category]}</span>
+                  <span className="text-3xl inline-block group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">{CATEGORY_EMOJI[p.category]}</span>
                   <StatusBadge active={p.isActive} />
                 </div>
                 <p className="font-semibold text-brown text-sm leading-tight mb-1">{p.name}</p>

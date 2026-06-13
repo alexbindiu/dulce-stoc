@@ -21,6 +21,22 @@ export default {
         gold: '#C9A84C',
         muted: '#9A8070',
       },
+      transitionDuration: {
+        '250': '250ms',
+      },
+      backgroundSize: {
+        '200': '200% 200%',
+      },
+      animation: {
+        fadeIn: 'fadeIn .4s ease-out both',
+        slideUp: 'slideUp .4s cubic-bezier(.22,1,.36,1) both',
+        'fade-in-up': 'fadeInUp .5s cubic-bezier(.22,1,.36,1) both',
+        'scale-in': 'scaleIn .3s cubic-bezier(.22,1,.36,1) both',
+        float: 'floaty 4s ease-in-out infinite',
+        gradient: 'gradientShift 8s ease infinite',
+        shimmer: 'shimmer 1.5s infinite',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],

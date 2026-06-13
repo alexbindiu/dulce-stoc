@@ -20,7 +20,7 @@ const tooltipStyle = { backgroundColor: '#FDFAF5', border: '1px solid #E2D5C0', 
 
 function KpiCard({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: boolean }) {
   return (
-    <div className={`bg-surface border rounded-lg p-4 ${accent ? 'border-caramel/40' : 'border-border'}`}>
+    <div className={`bg-surface border rounded-lg p-4 hover-lift ${accent ? 'border-caramel/40' : 'border-border'}`}>
       <div className="text-[10px] font-semibold tracking-widest uppercase text-muted mb-1">{label}</div>
       <div className={`font-display text-2xl font-semibold leading-none ${accent ? 'text-caramel' : 'text-brown'}`}>{value}</div>
       {sub && <div className="text-xs text-muted mt-1">{sub}</div>}
@@ -65,7 +65,7 @@ export default function StatisticsPageGql() {
         {/* Product KPIs */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">Produse</p>
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 stagger-children">
             <KpiCard label="Total produse" value={String(s?.totalProducts ?? 0)} sub={`${s?.activeProducts ?? 0} active`} />
             <KpiCard label="Stoc total" value={`${s?.totalStock ?? 0}`} sub="bucăți" />
             <KpiCard label="Valoare stoc" value={`${(s?.totalStockValue ?? 0).toLocaleString('ro-RO', { maximumFractionDigits: 0 })} lei`} accent />
@@ -76,7 +76,7 @@ export default function StatisticsPageGql() {
         {/* Order KPIs */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">Comenzi</p>
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 stagger-children">
             <KpiCard label="Total comenzi"   value={String(s?.orders?.totalOrders ?? 0)} />
             <KpiCard label="În așteptare"    value={String(s?.orders?.pendingOrders ?? 0)} />
             <KpiCard label="Venit total"     value={`${(s?.orders?.totalRevenue ?? 0).toFixed(2)} lei`} accent />

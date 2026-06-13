@@ -6,15 +6,83 @@
   html {
     font-family: 'DM Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-paper text-brown;
   }
+
+  /* Accesibilitate: respectă preferința de mișcare redusă */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
+
+/* ── Keyframes ───────────────────────────────────────────────────────────── */
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(.96) } to { opacity: 1; transform: scale(1) } }
+@keyframes floaty { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+@keyframes gradientShift { 0%, 100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
+@keyframes shimmer { 100% { transform: translateX(100%) } }
+@keyframes pulseSoft { 0%, 100% { opacity: 1 } 50% { opacity: .55 } }
 
 @layer components {
   .font-display {
     font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  /* Intrarea unei pagini (rute) */
+  .page-enter {
+    animation: fadeInUp .45s cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  /* Intrare în cascadă pentru copiii unui container (liste/grid-uri) */
+  .stagger-children > * {
+    animation: fadeInUp .5s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  .stagger-children > *:nth-child(1)  { animation-delay: .03s }
+  .stagger-children > *:nth-child(2)  { animation-delay: .07s }
+  .stagger-children > *:nth-child(3)  { animation-delay: .11s }
+  .stagger-children > *:nth-child(4)  { animation-delay: .15s }
+  .stagger-children > *:nth-child(5)  { animation-delay: .19s }
+  .stagger-children > *:nth-child(6)  { animation-delay: .23s }
+  .stagger-children > *:nth-child(7)  { animation-delay: .27s }
+  .stagger-children > *:nth-child(8)  { animation-delay: .31s }
+  .stagger-children > *:nth-child(9)  { animation-delay: .35s }
+  .stagger-children > *:nth-child(10) { animation-delay: .39s }
+  .stagger-children > *:nth-child(n+11) { animation-delay: .43s }
+
+  /* Ridicare subtilă la hover pentru carduri */
+  .hover-lift {
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px -14px rgba(46, 26, 14, .28);
+  }
+
+  /* Text cu gradient cald, animat */
+  .text-gradient {
+    background-image: linear-gradient(90deg, #C47A3A, #C9A84C, #C47A3A);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  /* Suprafață cu gradient cald, animat */
+  .bg-warm-gradient {
+    background-image: linear-gradient(120deg, rgba(196, 122, 58, .16), rgba(201, 168, 76, .10), rgba(196, 122, 58, .16));
+    background-size: 200% 200%;
+    animation: gradientShift 10s ease infinite;
   }
 }

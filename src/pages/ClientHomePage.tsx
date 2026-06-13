@@ -38,7 +38,7 @@ export default function ClientHomePage() {
   const businesses = bizData?.businesses ?? []
 
   return (
-    <div>
+    <div className="page-enter">
       <div className="mb-8">
         <h1 className="font-display text-4xl font-semibold text-brown mb-2">Bun venit, {currentUser?.firstName}!</h1>
         <p className="text-muted mb-5">Alege orașul tău și descoperă afacerile locale.</p>
@@ -48,14 +48,14 @@ export default function ClientHomePage() {
       {/* AI assistant entry */}
       <button
         onClick={() => navigate('/client/assistant')}
-        className="w-full mb-8 flex items-center gap-4 text-left bg-gradient-to-r from-caramel/15 to-gold/10 border border-caramel/30 rounded-2xl px-5 py-4 hover:shadow-md hover:border-caramel transition-all"
+        className="group w-full mb-8 flex items-center gap-4 text-left bg-warm-gradient bg-200 border border-caramel/30 rounded-2xl px-5 py-4 hover:border-caramel hover-lift"
       >
-        <span className="text-3xl">✨</span>
+        <span className="text-3xl group-hover:scale-110 transition-transform duration-300">✨</span>
         <div className="flex-1">
           <p className="font-display text-lg font-semibold text-brown">Asistentul Dulce</p>
           <p className="text-sm text-muted">Întreabă-mă ce poftești — „ceva vegan”, „tort de casă” — și-ți găsesc patiseria potrivită.</p>
         </div>
-        <span className="text-caramel font-semibold hidden sm:block">Întreabă →</span>
+        <span className="text-caramel font-semibold hidden sm:block group-hover:translate-x-1 transition-transform duration-300">Întreabă →</span>
       </button>
 
       {!city ? (
@@ -65,14 +65,14 @@ export default function ClientHomePage() {
       ) : businesses.length === 0 ? (
         <div className="py-20 text-center text-muted text-sm">Nicio afacere înregistrată în {city} momentan.</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
           {businesses.map((b) => (
             <div
               key={b.id}
               onClick={() => navigate(`/client/business/${b.id}`)}
-              className="bg-surface border border-border rounded-xl p-6 hover:shadow-lg hover:border-caramel transition-all cursor-pointer"
+              className="group bg-surface border border-border rounded-xl p-6 hover:border-caramel cursor-pointer hover-lift"
             >
-              <div className="w-12 h-12 rounded-full bg-caramel/10 flex items-center justify-center text-xl mb-4">
+              <div className="w-12 h-12 rounded-full bg-caramel/10 flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-caramel/20 transition-all duration-300">
                 {TYPE_EMOJI[b.businessType] ?? '🍽️'}
               </div>
               <h3 className="font-display text-xl font-semibold text-brown">{b.businessName}</h3>
@@ -80,7 +80,7 @@ export default function ClientHomePage() {
               {b.description && <p className="text-xs text-muted mb-3 line-clamp-2">{b.description}</p>}
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
                 <span className="text-xs font-semibold text-caramel">{b.productCount} produse</span>
-                <span className="text-xs font-semibold text-brown">Vezi detalii →</span>
+                <span className="text-xs font-semibold text-brown group-hover:translate-x-1 transition-transform duration-300 inline-block">Vezi detalii →</span>
               </div>
             </div>
           ))}

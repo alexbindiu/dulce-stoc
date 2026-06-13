@@ -48,19 +48,19 @@ export default function LandingPage() {
                 </Link>
               </div>
             </div>
-            <div className="hidden xl:block text-8xl opacity-20 select-none">🧁</div>
+            <div className="hidden xl:block text-8xl opacity-20 select-none animate-float">🧁</div>
           </div>
         </div>
 
         {/* KPI cards */}
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-8 stagger-children">
           {[
             { label: 'Total produse',   value: allProducts.length, sub: `${active} active`,      color: 'text-brown' },
             { label: 'Valoare stoc',    value: `${totalVal.toLocaleString('ro-RO', { maximumFractionDigits: 0 })} lei`, sub: 'în inventar', color: 'text-caramel' },
             { label: 'Stoc critic',     value: lowStock, sub: 'sub 10 bucăți',              color: lowStock > 0 ? 'text-amber-600' : 'text-green-700' },
             { label: 'Epuizate',        value: outStock, sub: 'produse fără stoc',           color: outStock > 0 ? 'text-red-600' : 'text-green-700' },
           ].map(({ label, value, sub, color }) => (
-            <div key={label} className="bg-surface border border-border rounded-xl p-5">
+            <div key={label} className="bg-surface border border-border rounded-xl p-5 hover-lift">
               <div className="text-[10px] font-semibold tracking-widest uppercase text-muted mb-2">{label}</div>
               <div className={`font-display text-3xl font-semibold ${color} leading-none`}>{value}</div>
               <div className="text-xs text-muted mt-1">{sub}</div>

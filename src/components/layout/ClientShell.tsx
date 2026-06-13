@@ -21,7 +21,7 @@ export function ClientShell() {
         </div>
       </header>
       
-      <main className="flex-1 max-w-6xl w-full mx-auto p-8 page-enter">
+      <main key={location.pathname} className="flex-1 max-w-6xl w-full mx-auto p-8 page-enter">
         <Outlet />
       </main>
     </div>

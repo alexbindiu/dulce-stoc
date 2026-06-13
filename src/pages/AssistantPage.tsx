@@ -52,7 +52,7 @@ export default function AssistantPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6 text-center">
-        <div className="text-4xl mb-2">✨</div>
+        <div className="text-4xl mb-2 inline-block animate-float">✨</div>
         <h1 className="font-display text-3xl font-semibold text-brown">Asistentul Dulce</h1>
         <p className="text-muted text-sm mt-1">Spune-mi ce poftești, iar eu îți recomand patiseriile potrivite.</p>
       </div>
@@ -62,7 +62,7 @@ export default function AssistantPage() {
           <div className="flex flex-wrap gap-2 justify-center">
             {SUGGESTIONS.map((s) => (
               <button key={s} onClick={() => send(s)}
-                className="text-sm bg-surface border border-border rounded-full px-4 py-2 text-brown hover:border-caramel hover:text-caramel transition-colors">
+                className="text-sm bg-surface border border-border rounded-full px-4 py-2 text-brown hover:border-caramel hover:text-caramel hover:-translate-y-0.5 transition-all">
                 {s}
               </button>
             ))}
@@ -70,11 +70,11 @@ export default function AssistantPage() {
         )}
 
         {messages.map((m, i) => m.role === 'user' ? (
-          <div key={i} className="flex justify-end">
+          <div key={i} className="flex justify-end animate-fade-in-up">
             <div className="bg-caramel text-white rounded-2xl rounded-tr-sm px-4 py-2 max-w-[80%] text-sm">{m.text}</div>
           </div>
         ) : (
-          <div key={i} className="space-y-3">
+          <div key={i} className="space-y-3 stagger-children">
             <div className="flex justify-start">
               <div className="bg-surface border border-border rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] text-sm text-brown leading-relaxed">
                 <span className="mr-1">🤖</span>{m.text}
@@ -84,10 +84,10 @@ export default function AssistantPage() {
               <button
                 key={r.business.id}
                 onClick={() => navigate(`/client/business/${r.business.id}`)}
-                className="w-full text-left bg-surface border border-border rounded-xl p-4 hover:border-caramel hover:shadow-sm transition-all"
+                className="group w-full text-left bg-surface border border-border rounded-xl p-4 hover:border-caramel hover-lift"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-caramel/10 flex items-center justify-center text-lg flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-caramel/10 flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 group-hover:bg-caramel/20 transition-all duration-300">
                     {TYPE_EMOJI[r.business.businessType] ?? '🍽️'}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -140,7 +140,7 @@ export default function AssistantPage() {
           className="flex-1 bg-surface border border-border rounded-full px-5 py-3 text-sm text-brown outline-none focus:border-caramel shadow-sm"
         />
         <button type="submit" disabled={loading || !input.trim()}
-          className="bg-caramel text-white w-12 h-12 rounded-full flex items-center justify-center disabled:opacity-50 flex-shrink-0 shadow-sm">
+          className="bg-caramel text-white w-12 h-12 rounded-full flex items-center justify-center disabled:opacity-50 flex-shrink-0 shadow-sm transition-transform hover:scale-105 active:scale-95 disabled:hover:scale-100">
           ➤
         </button>
       </form>

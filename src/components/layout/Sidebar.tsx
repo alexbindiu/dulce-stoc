@@ -32,14 +32,14 @@ export function Sidebar() {
             to={to}
             end={end}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+              `group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 isActive
                   ? 'bg-white/15 text-white font-semibold'
-                  : 'text-white/60 hover:bg-white/8 hover:text-white/90'
+                  : 'text-white/60 hover:bg-white/8 hover:text-white/90 hover:translate-x-0.5'
               }`
             }
           >
-            <span className="text-base">{icon}</span>
+            <span className="text-base group-hover:scale-125 transition-transform duration-300">{icon}</span>
             {label}
           </NavLink>
         ))}

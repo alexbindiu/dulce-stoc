@@ -20,7 +20,7 @@ export function AppShell() {
     <div className="min-h-screen">
       <Sidebar />
       <main className="ml-56 flex flex-col bg-paper min-h-screen">
-        <div className="page-enter flex-1 flex flex-col">
+        <div key={location.pathname} className="page-enter flex-1 flex flex-col">
           <Outlet />
         </div>
       </main>

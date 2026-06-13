@@ -48,8 +48,10 @@ export default function BusinessDetailPage() {
   if (!business) return <div className="py-20 text-center text-muted text-sm">Afacerea nu a fost găsită.</div>
 
   return (
-    <div>
-      <button onClick={() => navigate('/client')} className="text-sm text-caramel hover:text-brown mb-4">← Înapoi la afaceri</button>
+    <div className="page-enter">
+      <button onClick={() => navigate('/client')} className="group inline-flex items-center gap-1 text-sm text-caramel hover:text-brown mb-4 transition-colors">
+        <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> Înapoi la afaceri
+      </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile + catalog */}
@@ -79,9 +81,9 @@ export default function BusinessDetailPage() {
             {products.length === 0 ? (
               <p className="text-sm text-muted">Această afacere nu are produse disponibile momentan.</p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 stagger-children">
                 {products.map((p) => (
-                  <div key={p.id} className="border border-border rounded-lg p-3 flex items-start justify-between">
+                  <div key={p.id} className="border border-border rounded-lg p-3 flex items-start justify-between hover:border-caramel hover-lift">
                     <div className="min-w-0">
                       <p className="font-semibold text-brown text-sm">{p.name}</p>
                       <p className="text-xs text-muted">{p.category}</p>

@@ -8,7 +8,7 @@ export default function Landing() {
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100vh-64px)]">
 
         {/* Left — copy */}
-        <div className="flex flex-col justify-center px-10 lg:px-20 py-16">
+        <div className="flex flex-col justify-center px-10 lg:px-20 py-16 stagger-children">
 
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-7">
@@ -21,7 +21,7 @@ export default function Landing() {
           {/* Logo / Name */}
           <div className="font-display text-6xl lg:text-7xl font-semibold text-brown leading-none mb-4">
             Dulce{' '}
-            <span className="text-caramel italic">Stoc</span>
+            <span className="text-gradient italic">Stoc</span>
           </div>
 
           {/* Tagline */}
@@ -41,9 +41,9 @@ export default function Landing() {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 bg-brown text-white px-7 py-3 rounded-lg text-sm font-semibold hover:bg-brown-mid transition-colors"
+              className="group inline-flex items-center gap-2 bg-brown text-white px-7 py-3 rounded-lg text-sm font-semibold hover:bg-brown-mid hover:-translate-y-0.5 transition-all"
             >
-              Deschide aplicația →
+              Deschide aplicația <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
             </Link>
           </div>
 
@@ -68,7 +68,7 @@ export default function Landing() {
 
         {/* Right — decorative mockup */}
         <div className="hidden lg:flex items-center justify-center bg-brown px-12 py-16">
-          <div className="w-full max-w-sm bg-surface rounded-xl overflow-hidden shadow-2xl">
+          <div className="w-full max-w-sm bg-surface rounded-xl overflow-hidden shadow-2xl animate-float">
             {/* Mini topbar */}
             <div className="bg-paper border-b border-border px-4 py-3 flex items-center justify-between">
               <span className="font-display text-base font-semibold text-brown">
@@ -114,7 +114,7 @@ export default function Landing() {
 
       {/* ── FEATURES STRIP ── */}
       <section className="border-t border-border bg-surface py-10 px-10 lg:px-20">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl stagger-children">
           {[
             {
               icon: '📦',
