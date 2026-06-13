@@ -80,7 +80,7 @@ export default function Landing() {
             </div>
             {/* Mini rows */}
             {[
-              { emoji: '🎂', name: 'Tort Ștefania',    price: '85,00',  stock: 24,  active: true  },
+              { emoji: '🎂', name: 'Tort de ciocolată', price: '85,00',  stock: 24,  active: true  },
               { emoji: '🥐', name: 'Croissant cu unt', price: '9,50',   stock: 80,  active: true  },
               { emoji: '🍫', name: 'Ecler ciocolată',  price: '12,00',  stock: 45,  active: true  },
               { emoji: '🍰', name: 'Prăjitură nucă',   price: '7,50',   stock: 0,   active: false },
