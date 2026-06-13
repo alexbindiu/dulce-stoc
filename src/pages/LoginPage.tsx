@@ -130,13 +130,13 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-3 flex-1 min-h-0">
             <div className="flex flex-col min-h-0">
               <p className="text-[11px] text-white/40 mb-1.5 flex-shrink-0">🏪 Patiserii ({businesses.length})</p>
-              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 stagger-children">
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-1.5 pr-1 stagger-children">
                 {businesses.map((a) => <AccountCard key={a.email} a={a} />)}
               </div>
             </div>
             <div className="flex flex-col min-h-0">
               <p className="text-[11px] text-white/40 mb-1.5 flex-shrink-0">👤 Clienți ({clients.length})</p>
-              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 stagger-children">
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-1.5 pr-1 stagger-children">
                 {clients.map((a) => <AccountCard key={a.email} a={a} />)}
               </div>
             </div>

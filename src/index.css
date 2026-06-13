@@ -85,4 +85,13 @@
     background-size: 200% 200%;
     animation: gradientShift 10s ease infinite;
   }
+
+  /* Ascunde scrollbar-ul (conținutul rămâne scrollabil) */
+  .no-scrollbar {
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge vechi */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;                /* Chrome/Safari */
+  }
 }
