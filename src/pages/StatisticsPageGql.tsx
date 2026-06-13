@@ -59,9 +59,6 @@ export default function StatisticsPageGql() {
       <Topbar title="Statistici" subtitle="— live dashboard" />
       <div className="flex-1 p-6 space-y-6">
 
-        {/* Generator panel */}
-        <GeneratorPanel />
-
         {/* Product KPIs */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">Produse</p>
@@ -153,6 +150,9 @@ export default function StatisticsPageGql() {
             )}
           </div>
         </div>
+
+        {/* Generator de date — sub statistici */}
+        <GeneratorPanel />
 
       </div>
     </div>
