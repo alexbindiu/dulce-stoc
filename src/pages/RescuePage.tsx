@@ -3,33 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import { useCityStore } from '@/store/cityStore'
 import { GET_RESCUE_DEALS } from '@/services/gql/marketplace.gql'
+import { dealStatus, formatCountdown } from '@/utils/deals'
 
 interface Deal {
   id: string; name: string; category: string; description?: string
-  originalPrice: number; finalPrice: number; discountPercent: number
+  originalPrice: number; finalPrice: number; discountPercent: number; free: boolean
   expiryDate?: string; stock: number
   businessId: string; businessName: string; businessType: string; county: string
 }
 
 const CAT_EMOJI: Record<string, string> = {
   'Tort': '🎂', 'Ecler': '🍫', 'Croissant': '🥐', 'Prăjitură': '🍰', 'Tartă': '🥧',
-}
-
-function expiryTarget(d?: string): number | null {
-  if (!d) return null
-  const t = new Date(`${d}T23:59:59`).getTime()
-  return isNaN(t) ? null : t
-}
-
-function fmt(diff: number): { label: string; urgent: boolean } {
-  if (diff <= 0) return { label: 'Ultima șansă!', urgent: true }
-  const days = Math.floor(diff / 86400000)
-  const h = Math.floor(diff / 3600000) % 24
-  const m = Math.floor(diff / 60000) % 60
-  const s = Math.floor(diff / 1000) % 60
-  const pad = (n: number) => String(n).padStart(2, '0')
-  if (days > 0) return { label: `${days}z ${pad(h)}h ${pad(m)}m ${pad(s)}s`, urgent: days === 0 }
-  return { label: `${pad(h)}h ${pad(m)}m ${pad(s)}s`, urgent: h < 12 }
 }
 
 export default function RescuePage() {
@@ -47,6 +31,7 @@ export default function RescuePage() {
     fetchPolicy: 'cache-and-network',
   })
   const deals = data?.rescueDeals ?? []
+  const freeCount = deals.filter((d) => dealStatus(d.originalPrice, d.discountPercent, d.expiryDate, now).free).length
 
   return (
     <div className="page-enter">
@@ -55,6 +40,7 @@ export default function RescuePage() {
         <h1 className="font-display text-3xl font-semibold text-brown">Dulce Rescue</h1>
         <p className="text-muted text-sm mt-1 max-w-xl mx-auto">
           Salvează un desert de la risipă — produse aproape de expirare, la preț redus.
+          În <span className="font-semibold text-green-700">ultimele 24h devin GRATIS</span>.
           {city ? ` În ${city}.` : ' Alege un oraș de pe pagina principală pentru rezultate locale.'}
         </p>
       </div>
@@ -69,22 +55,22 @@ export default function RescuePage() {
         <>
           <div className="mb-5 flex items-center justify-center gap-2 text-sm text-green-700">
             <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse-soft" />
-            {deals.length} deserturi de salvat chiar acum
+            {deals.length} deserturi de salvat{freeCount > 0 ? ` · ${freeCount} GRATIS acum` : ''}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger-children">
             {deals.map((d) => {
-              const target = expiryTarget(d.expiryDate)
-              const c = target !== null ? fmt(target - now) : { label: 'Ofertă limitată', urgent: false }
+              const st = dealStatus(d.originalPrice, d.discountPercent, d.expiryDate, now)
+              const countdown = st.remainingMs !== null ? formatCountdown(st.remainingMs) : 'ofertă limitată'
               return (
                 <div
                   key={d.id}
                   onClick={() => navigate(`/client/business/${d.businessId}`)}
                   className="group relative bg-surface border border-border rounded-2xl p-5 cursor-pointer hover-lift hover:border-green-400 overflow-hidden"
                 >
-                  {/* discount badge */}
-                  <div className="absolute top-0 right-0 bg-green-600 text-white text-sm font-bold px-3 py-1.5 rounded-bl-2xl">
-                    −{d.discountPercent}%
+                  {/* badge */}
+                  <div className={`absolute top-0 right-0 text-white text-sm font-bold px-3 py-1.5 rounded-bl-2xl ${st.free ? 'bg-green-600' : 'bg-caramel'}`}>
+                    {st.free ? 'GRATIS' : `−${d.discountPercent}%`}
                   </div>
 
                   <div className="flex items-center gap-3 mb-3">
@@ -103,16 +89,25 @@ export default function RescuePage() {
 
                   {/* price */}
                   <div className="flex items-end gap-2 mb-3">
-                    <span className="text-2xl font-bold text-green-700">{d.finalPrice.toFixed(2)} lei</span>
+                    {st.free ? (
+                      <span className="text-2xl font-extrabold text-green-700">GRATIS</span>
+                    ) : (
+                      <span className="text-2xl font-bold text-green-700">{st.finalPrice.toFixed(2)} lei</span>
+                    )}
                     <span className="text-sm text-muted line-through mb-0.5">{d.originalPrice.toFixed(2)} lei</span>
                   </div>
 
                   {/* countdown */}
-                  <div className={`flex items-center justify-between rounded-lg px-3 py-2 ${c.urgent ? 'bg-red-50 border border-red-200' : 'bg-paper border border-border'}`}>
-                    <span className="text-[11px] uppercase tracking-wide text-muted">Expiră în</span>
-                    <span className={`font-mono text-sm font-semibold tabular-nums ${c.urgent ? 'text-red-600' : 'text-brown'}`}>
-                      {c.label}
-                    </span>
+                  <div className={`rounded-lg px-3 py-2 ${st.free ? 'bg-red-50 border border-red-200' : 'bg-paper border border-border'}`}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] uppercase tracking-wide text-muted">Expiră în</span>
+                      <span className={`font-mono text-sm font-semibold tabular-nums ${st.free ? 'text-red-600' : 'text-brown'}`}>
+                        {countdown}
+                      </span>
+                    </div>
+                    {!st.free && (
+                      <p className="text-[11px] text-green-700 mt-1">🎁 devine GRATIS în ultimele 24h</p>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between mt-3">

@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import { useAuthStore } from '@/store/authStore'
 import { GET_BUSINESS, GET_BUSINESS_PRODUCTS } from '@/services/gql/marketplace.gql'
 import { useRoomChat, ChatMeta } from '@/hooks/useRoomChat'
 import { ChatPanel } from '@/components/chat/ChatPanel'
+import { dealStatus, formatCountdown } from '@/utils/deals'
 
 interface Business {
   id: string; businessName: string; businessType: string; county: string
@@ -13,7 +14,7 @@ interface Business {
 }
 interface CatalogProduct {
   id: string; name: string; category: string; pricePerUnit: number; stock: number
-  description?: string; expiryDate?: string
+  description?: string; expiryDate?: string; discountPercent?: number
 }
 
 export default function BusinessDetailPage() {
@@ -26,6 +27,12 @@ export default function BusinessDetailPage() {
 
   const business = bizData?.business
   const products = prodData?.businessProducts ?? []
+
+  const [now, setNow] = useState(Date.now())
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(t)
+  }, [])
 
   const room = business && currentUser ? `dm:${business.id}:${currentUser.id}` : null
   const meta: ChatMeta | null = useMemo(() => {
@@ -82,21 +89,42 @@ export default function BusinessDetailPage() {
               <p className="text-sm text-muted">Această afacere nu are produse disponibile momentan.</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 stagger-children">
-                {products.map((p) => (
-                  <div key={p.id} className="border border-border rounded-lg p-3 flex items-start justify-between hover:border-caramel hover-lift">
+                {products.map((p) => {
+                  const st = dealStatus(p.pricePerUnit, p.discountPercent, p.expiryDate, now)
+                  return (
+                  <div key={p.id} className={`border rounded-lg p-3 flex items-start justify-between hover-lift ${st.free ? 'border-green-300 bg-green-50/40 hover:border-green-400' : st.discounted ? 'border-caramel/40 hover:border-caramel' : 'border-border hover:border-caramel'}`}>
                     <div className="min-w-0">
-                      <p className="font-semibold text-brown text-sm">{p.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-brown text-sm truncate">{p.name}</p>
+                        {st.free && <span className="text-[10px] font-bold bg-green-600 text-white rounded px-1.5 py-0.5 flex-shrink-0">GRATIS</span>}
+                        {st.discounted && <span className="text-[10px] font-bold bg-caramel text-white rounded px-1.5 py-0.5 flex-shrink-0">−{p.discountPercent}%</span>}
+                      </div>
                       <p className="text-xs text-muted">{p.category}</p>
                       {p.description && <p className="text-xs text-muted mt-1 line-clamp-2">{p.description}</p>}
+                      {(st.free || st.discounted) && st.remainingMs !== null && (
+                        <p className={`text-[11px] mt-1 ${st.free ? 'text-red-600 font-semibold' : 'text-green-700'}`}>
+                          {st.free ? '🌱 gratis — ' : '🎁 gratis în ultimele 24h · '}expiră în {formatCountdown(st.remainingMs)}
+                        </p>
+                      )}
                     </div>
                     <div className="text-right flex-shrink-0 ml-2">
-                      <p className="text-sm font-semibold text-brown">{p.pricePerUnit.toFixed(2)} lei</p>
+                      {st.free ? (
+                        <p className="text-sm font-extrabold text-green-700">GRATIS</p>
+                      ) : st.discounted ? (
+                        <p className="text-sm font-bold text-green-700">{st.finalPrice.toFixed(2)} lei</p>
+                      ) : (
+                        <p className="text-sm font-semibold text-brown">{p.pricePerUnit.toFixed(2)} lei</p>
+                      )}
+                      {(st.free || st.discounted) && (
+                        <p className="text-[11px] text-muted line-through">{p.pricePerUnit.toFixed(2)} lei</p>
+                      )}
                       <p className={`text-xs ${p.stock === 0 ? 'text-red-500' : 'text-muted'}`}>
                         {p.stock === 0 ? 'Epuizat' : `${p.stock} buc.`}
                       </p>
                     </div>
                   </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>

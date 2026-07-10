@@ -39,7 +39,7 @@ export const GET_RESCUE_DEALS = gql`
   query RescueDeals($city: String) {
     rescueDeals(city: $city) {
       id name category description
-      originalPrice finalPrice discountPercent expiryDate stock
+      originalPrice finalPrice discountPercent free expiryDate stock
       businessId businessName businessType county
     }
   }
