@@ -34,3 +34,13 @@ export const GET_BUSINESS_PRODUCTS = gql`
     businessProducts(businessId: $businessId) { ...ProductFields }
   }
 `;
+
+export const GET_RESCUE_DEALS = gql`
+  query RescueDeals($city: String) {
+    rescueDeals(city: $city) {
+      id name category description
+      originalPrice finalPrice discountPercent expiryDate stock
+      businessId businessName businessType county
+    }
+  }
+`;

@@ -45,18 +45,32 @@ export default function ClientHomePage() {
         <CitySelect cities={cities} value={city} onChange={setCity} />
       </div>
 
-      {/* AI assistant entry */}
-      <button
-        onClick={() => navigate('/client/assistant')}
-        className="group w-full mb-8 flex items-center gap-4 text-left bg-warm-gradient bg-200 border border-caramel/30 rounded-2xl px-5 py-4 hover:border-caramel hover-lift"
-      >
-        <span className="text-3xl group-hover:scale-110 transition-transform duration-300">✨</span>
-        <div className="flex-1">
-          <p className="font-display text-lg font-semibold text-brown">Asistentul Dulce</p>
-          <p className="text-sm text-muted">Întreabă-mă ce poftești — „ceva vegan”, „tort de casă” — și-ți găsesc patiseria potrivită.</p>
-        </div>
-        <span className="text-caramel font-semibold hidden sm:block group-hover:translate-x-1 transition-transform duration-300">Întreabă →</span>
-      </button>
+      {/* Entry banners */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <button
+          onClick={() => navigate('/client/assistant')}
+          className="group flex items-center gap-4 text-left bg-warm-gradient bg-200 border border-caramel/30 rounded-2xl px-5 py-4 hover:border-caramel hover-lift"
+        >
+          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">✨</span>
+          <div className="flex-1">
+            <p className="font-display text-lg font-semibold text-brown">Asistentul Dulce</p>
+            <p className="text-sm text-muted">Întreabă-mă ce poftești — „ceva vegan”, „tort de casă”.</p>
+          </div>
+          <span className="text-caramel font-semibold hidden sm:block group-hover:translate-x-1 transition-transform duration-300">→</span>
+        </button>
+
+        <button
+          onClick={() => navigate('/client/rescue')}
+          className="group flex items-center gap-4 text-left bg-gradient-to-r from-green-100/70 to-green-50/40 border border-green-300/50 rounded-2xl px-5 py-4 hover:border-green-400 hover-lift"
+        >
+          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🌱</span>
+          <div className="flex-1">
+            <p className="font-display text-lg font-semibold text-brown">Dulce Rescue</p>
+            <p className="text-sm text-muted">Salvează deserturi aproape de expirare, la preț redus.</p>
+          </div>
+          <span className="text-green-700 font-semibold hidden sm:block group-hover:translate-x-1 transition-transform duration-300">→</span>
+        </button>
+      </div>
 
       {!city ? (
         <div className="py-20 text-center text-muted text-sm">Selectează un oraș pentru a vedea afacerile disponibile.</div>

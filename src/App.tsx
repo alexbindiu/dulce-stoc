@@ -18,6 +18,7 @@ import OrdersPage       from '@/pages/OrdersPage'
 import ClientHomePage   from '@/pages/ClientHomePage'
 import BusinessDetailPage from '@/pages/BusinessDetailPage'
 import AssistantPage    from '@/pages/AssistantPage'
+import RescuePage       from '@/pages/RescuePage'
 import AdminInboxPage   from '@/pages/AdminInboxPage'
 import SecurityPage     from '@/pages/SecurityPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
@@ -89,6 +90,7 @@ export default function App() {
         <Route path="/client" element={<ClientShell />}>
           <Route index element={<ClientHomePage />} />
           <Route path="assistant" element={<AssistantPage />} />
+          <Route path="rescue" element={<RescuePage />} />
           <Route path="business/:id" element={<BusinessDetailPage />} />
         </Route>
 
